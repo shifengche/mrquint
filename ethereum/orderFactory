@@ -1,0 +1,99 @@
+contract Order {
+     address public owner;
+     uint public customerID;
+     uint public printerID;
+     string public fileURL;
+
+      enum Status {NewOrder,Printing,Finished,Error}
+
+     Status public status;
+
+     function OrderIsNew() returns(bool){
+         if (status==Status.NewOrder){
+             return true;
+         }
+         else{
+             return false;
+         }
+     }
+
+     function OrderIsPrinting() returns (bool) {
+       if (status==Status.Printing){
+             return true;
+         }
+         else{
+             return false;
+         }
+
+     }
+
+   function OrderIsFinished() returns (bool) {
+       if (status==Status.Finished){
+             return true;
+         }
+         else{
+             return false;
+         }
+
+     }
+
+    function  Order(uint _customerID,string _fileURL) {
+        owner = msg.sender;
+        status = Status.NewOrder;
+        customerID = _customerID;
+        fileURL = _fileURL;
+    }
+
+
+     function acceptOrder(uint _printerID){
+         status = Status.Printing;
+         printerID = _printerID;
+     }
+
+     function remove() { if (msg.sender == owner) suicide(owner); }
+
+}
+
+contract OrderFactory {
+
+
+
+    uint public numOrders;
+    mapping  (uint => Order) public orders;
+    address public latestOrder;
+    event startOrderEvent();
+    event endOrderEvent();
+    function OrderFactory() {
+    }
+
+    function addOrder(Order _Order)  {
+        orders[numOrders++]=_Order;
+
+    }
+
+
+        function createOrder(uint _customerID,string _fileURL)  {
+        Order newOrder = new Order(_customerID,_fileURL);
+        orders[numOrders++]=newOrder;
+        latestOrder = newOrder;
+        endOrderEvent();
+
+    }
+
+
+
+     function getNextNewOrder() returns (Order) {
+         Order nextOrder;
+         for (uint ii=0;ii<numOrders;ii++){
+            if (orders[ii].OrderIsNew()== true){
+               nextOrder =  orders[ii];
+            }
+         }
+         return nextOrder;
+     }
+
+    function test() {
+        startOrderEvent();
+    }
+
+}
