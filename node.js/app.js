@@ -3,8 +3,9 @@ var app = express();
 var web3 = require('web3');
 //var http = require('http');
 //var io = require('socket.io')(http);
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+io.set('origins', 'http://yourdomain.com:80');
 
 var orderAbi=[{"constant":true,"inputs":[],"name":"status","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsNew","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"fileURL","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"customerID","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[],"name":"remove","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsFinished","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"printerID","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_printerID","type":"uint256"}],"name":"isMyOrder","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":false,"inputs":[{"name":"_printerID","type":"uint256"}],"name":"acceptOrder","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsPrinting","outputs":[{"name":"","type":"bool"}],"type":"function"},{"inputs":[{"name":"_customerID","type":"uint256"},{"name":"_fileURL","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"printerID","type":"uint256"}],"name":"jobClaimed","type":"event"}];
 
@@ -54,14 +55,14 @@ function sendDesign(req, res) {
 
 
 app.use(express.static('../static'));
-app.use(express.static('../node_modules'));
 
 app.get('/ajax/balance', getBalance);
 
 app.get('/ajax/design', sendDesign);
 
 app.request.setMaxListeners(0);
-app.listen(8888);
+//app.listen(8888);
+server.listen(8888);
 
 // Socket code
 var connections = [];
