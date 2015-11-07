@@ -18,9 +18,11 @@ res.send(bal);
 }
 
 function gotDesign(req, res) {
+	console.log("Got requrest from customer");
+	console.log(req.query.customerID);
 	console.log("Got requrest for design");
-	console.log(req.query.design);
-	res.send(req.query.design);
+	console.log(req.query.fileURL);
+	res.send(req.query.fileURL);
 }
 
 

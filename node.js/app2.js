@@ -1,4 +1,6 @@
-web3 = require('web3');
+var express = require('express');
+var app = express();
+var web3 = require('web3');
 web3.setProvider(new web3.providers.HttpProvider('http://iot.ethereumoxford.org:8545'));
 
 function createOrder(req, res) {
