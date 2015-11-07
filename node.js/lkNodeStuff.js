@@ -24,12 +24,4 @@ function addOrder(customerID,fileURL){
 
 }
 
-event.watch(function(error, result){
-  if (!error)
-    console.log(orderFactory.latestOrder.call());
-    var orderContract = web3.eth.contract(orderAbi);
 
-    var order = orderContract.at(orderFactory.latestOrder.call());
-  console.log(order.fileURL.call());
-
-});
