@@ -13,7 +13,7 @@
     <script src="./js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <title>Bootstrap</title>
+    <title>Mr Quint</title>
 </head>
 
 <body>
@@ -21,7 +21,12 @@
 <div id="countdown"></div>
 <div id="notifier"></div>
 <script type="text/javascript">
-
+var socket = io('http://localhost');
+  socket.on('status_data', function (data) {
+    console.log(data);
+    updateStatus($("#design1").next(), data);
+    //socket.emit('my other event', { my: 'data' });
+});
 </script>
 <!--Please Enter A Number: <input type="text" id="userTime" />
 <input type="button" value="Go" onclick="startTimer()" /> -->
