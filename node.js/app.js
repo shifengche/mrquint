@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 var web3 = require('web3');
-var io = require('socket.io')(http);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 web3.setProvider(new web3.providers.HttpProvider('http://iot.ethereumoxford.org:8545'));
 
