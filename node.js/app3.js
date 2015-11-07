@@ -15,24 +15,6 @@ console.log("got balance of "+bal);
 
 res.send(bal);
 
+
+
 }
-
-function gotDesign(req, res) {
-	console.log("Got requrest for design");
-	console.log(req.query.design);
-	res.send(req.query.design);
-}
-
-
-
-app.use(express.static('../static'));
-
-app.get('/ajax/balance', getBalance);
-
-app.get('/ajax/design', gotDesign);
-
-app.request.setMaxListeners(0);
-app.listen(8888);
-
-console.log("starting");
-
