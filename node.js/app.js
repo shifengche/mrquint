@@ -3,9 +3,9 @@ var app = express();
 var web3 = require('web3');
 //var http = require('http');
 //var io = require('socket.io')(http);
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-io.set('origins', 'http://yourdomain.com:80');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+io.set('origins', 'http://localhost:8888');
 
 var orderAbi=[{"constant":true,"inputs":[],"name":"status","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsNew","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"fileURL","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"customerID","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[],"name":"remove","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsFinished","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":true,"inputs":[],"name":"printerID","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_printerID","type":"uint256"}],"name":"isMyOrder","outputs":[{"name":"","type":"bool"}],"type":"function"},{"constant":false,"inputs":[{"name":"_printerID","type":"uint256"}],"name":"acceptOrder","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"OrderIsPrinting","outputs":[{"name":"","type":"bool"}],"type":"function"},{"inputs":[{"name":"_customerID","type":"uint256"},{"name":"_fileURL","type":"string"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"printerID","type":"uint256"}],"name":"jobClaimed","type":"event"}];
 
@@ -34,7 +34,9 @@ res.send(bal);
 }
 
 function addOrder(customerID,fileURL){
-	orderFactory.createOrder.sendTransaction(customerID,fileURL, {from: web3.eth.accounts[0],gas: 1000000});
+	var orderID = orderFactory.createOrder.sendTransaction(customerID,fileURL, {from: web3.eth.accounts[0],gas: 1000000});
+	console.log(orderID);
+	return orderID;
 
 }
 
@@ -80,9 +82,25 @@ event.watch(function(error, result){
 	    console.log(orderFactory.latestOrder.call());
 	    var orderContract = web3.eth.contract(orderAbi);
 
-		var order = orderContract.at(orderFactory.latestOrder.call());
+		var order = orderContract.at(orderID);
 		console.log(order.fileURL.call());
-		//sendGethData(order.status.call());
+		var newStatus;
+		switch (order.status.call()) {
+			case 1:
+				newStatus = "NewOrder";
+				break;
+			case 2:
+				newStatus = "Printing";
+				break;
+			case 3:
+				newStatus = "Finished";
+				break;
+			case 4:
+				newStatus = "Error";
+				break;
+
+		}
+		sendGethData(newStatus);
 	}
 
 });

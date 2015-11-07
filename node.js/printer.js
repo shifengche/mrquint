@@ -30,6 +30,7 @@ event.watch(function(error, result){
 
 function print(file) {
 
+	//update to Printing
 
 	open  = spawn('sh', ['print.sh', file]); // the second arg is the command 
 	                                          // options
@@ -40,12 +41,16 @@ function print(file) {
 
 	open.stderr.on('data', function (data) {
 	  console.log('stderr: ' + data);
-	  //error
+	  
 	});
 
 	open.on('exit', function (code) {
 	  console.log('Printing finished exited with code ' + code);
-	  //finished
+	  if (code===0) {
+	  	//Update to Finished
+	  } else if (code===1) {
+	  	//Update to Error
+	  }
 
 	});
 }
