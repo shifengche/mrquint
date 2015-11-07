@@ -3,7 +3,7 @@ contract Order {
      uint public customerID;
      uint public printerID;
      string public fileURL;
-
+     event jobClaimed(uint printerID);
       enum Status {NewOrder,Printing,Finished,Error}
 
      Status public status;
@@ -29,11 +29,12 @@ contract Order {
 
    function OrderIsFinished() returns (bool) {
        if (status==Status.Finished){
-             return true;
-         }
-         else{
-             return false;
-         }
+           return true;
+       }
+       else{
+           return false;
+       }
+         
 
      }
 
@@ -48,7 +49,17 @@ contract Order {
      function acceptOrder(uint _printerID){
          status = Status.Printing;
          printerID = _printerID;
+         jobClaimed(printerID);
      }
+
+function isMyOrder(uint _printerID) returns (bool) {
+    if ((status==Status.Printing) && (printerID==_printerID)){
+        return true;
+    }
+    else{
+        return false;
+    }
+} 
 
      function remove() { if (msg.sender == owner) suicide(owner); }
 
