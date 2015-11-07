@@ -1,4 +1,4 @@
-    function getMyBalance() {
+function getMyBalance() {
         var ajaxURL = '/ajax/balance';
         $.getJSON(ajaxURL, function(data){
         console.log("got data");
@@ -16,5 +16,20 @@
         $.getJSON(ajaxURL, {"customerID": "1234", "fileURL": $(this).attr("href")}, function(data){
         console.log("got data");
         console.log(data);
-        } );
+        });
+        updateStatus($(this).next(), "NewOrder");
     });
+
+function updateStatus(obj, status) {
+	switch (status) {
+		case "Printing":
+			obj.html(status);
+			//add javascript timer here
+			break;
+		case "NewOrder":
+			obj.html("New Order");
+		case "Finished":
+		case "Error":
+			obj.html(status);
+	}
+}
