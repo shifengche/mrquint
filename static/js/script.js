@@ -13,7 +13,7 @@
         e.preventDefault();
         console.log($(this).attr("id"));
         var ajaxURL = '/ajax/design';
-        $.getJSON(ajaxURL, {"customerid": "1234", "url": $(this).attr("href")}, function(data){
+        $.getJSON(ajaxURL, {"customerID": "1234", "fileURL": $(this).attr("href")}, function(data){
         console.log("got data");
         console.log(data);
         } );
