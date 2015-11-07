@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var web3 = require('web3');
+var io = require('socket.io')(http);
 
 web3.setProvider(new web3.providers.HttpProvider('http://iot.ethereumoxford.org:8545'));
 
@@ -35,6 +36,19 @@ app.get('/ajax/design', gotDesign);
 
 app.request.setMaxListeners(0);
 app.listen(8888);
+
+// Socket code
+var connections = [];
+io.on('connection', function(socket) {
+  connections.push(socket);
+  socket.on('disconnect', function() {
+    connections.splice(connections.indexOf(socket), 1);
+  });
+});
+
+function sendGethData(data) {
+  io.emit('geth_data', data);
+}
 
 console.log("starting");
 
