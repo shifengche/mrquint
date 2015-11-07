@@ -72,8 +72,8 @@ contract OrderFactory {
     uint public numOrders;
     mapping  (uint => Order) public orders;
     address public latestOrder;
-    event startOrderEvent();
-    event endOrderEvent();
+    event jobSubmitted(address Order);
+   
     function OrderFactory() {
     }
 
@@ -87,7 +87,7 @@ contract OrderFactory {
         Order newOrder = new Order(_customerID,_fileURL);
         orders[numOrders++]=newOrder;
         latestOrder = newOrder;
-        endOrderEvent();
+        jobSubmitted(newOrder);
 
     }
 
@@ -104,7 +104,8 @@ contract OrderFactory {
      }
 
     function test() {
-        startOrderEvent();
+        address testOrder;
+        jobSubmitted(testOrder);
     }
 
 }
