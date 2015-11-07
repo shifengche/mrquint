@@ -54,6 +54,7 @@ function sendDesign(req, res) {
 
 
 app.use(express.static('../static'));
+app.use(express.static('../node_modules'));
 
 app.get('/ajax/balance', getBalance);
 
