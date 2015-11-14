@@ -4,10 +4,31 @@ contract Order {
      uint public printerID;
      string public fileURL;
      event jobClaimed(uint printerID);
+     event statusChanged();
       enum Status {NewOrder,Printing,Finished,Error}
 
      Status public status;
 
+
+    function setPrinting(){
+        status = Status.Printing;
+        statusChanged();
+    }    
+
+    function setNew(){
+        status = Status.NewOrder;
+        statusChanged();
+    }  
+    
+    function setFinished(){
+        status = Status.Finished;
+        statusChanged();
+    }  
+
+    function setError(){
+        status = Status.Error;
+        statusChanged();
+    }
      function OrderIsNew() returns(bool){
          if (status==Status.NewOrder){
              return true;
@@ -40,7 +61,7 @@ contract Order {
 
     function  Order(uint _customerID,string _fileURL) {
         owner = msg.sender;
-        status = Status.NewOrder;
+        setNew();
         customerID = _customerID;
         fileURL = _fileURL;
     }
